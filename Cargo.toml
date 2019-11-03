@@ -1,0 +1,30 @@
+[package]
+name = "numanji"
+version = "0.1.0"
+description = "Local-affinity first NUMA-aware allocator"
+authors = ["Mahmut Bulut <vertexclique@gmail.com>"]
+keywords = ["numa", "numa-aware", "allocator", "memory"]
+categories = ["memory-management", "caching"]
+edition = "2018"
+exclude = [
+	".github/*",
+	"examples/*",
+	"graphstore/*",
+	"tests/*",
+	"img/*",
+	"ci/*",
+	"benches/*",
+	"doc/*",
+	"*.png",
+	"*.dot",
+	"*.yml",
+	"*.toml",
+	"*.md"
+]
+
+[dependencies]
+lazy_static = "^1.4"
+allocator-suite = "^0.1"
+
+[target.'cfg(not(any(target_os = "android", target_os = "linux")))'.dependencies]
+jemallocator = "^0.3"
