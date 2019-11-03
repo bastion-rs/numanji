@@ -5,7 +5,12 @@ description = "Local-affinity first NUMA-aware allocator with optional fallback"
 authors = ["Mahmut Bulut <vertexclique@gmail.com>"]
 keywords = ["numa", "numa-aware", "allocator", "memory"]
 categories = ["memory-management", "caching"]
+homepage = "https://github.com/bastion-rs/numanji"
+repository = "https://github.com/bastion-rs/numanji"
+documentation = "https://docs.rs/numanji"
 edition = "2018"
+readme = "README.md"
+license = "Apache-2.0/MIT"
 exclude = [
 	".github/*",
 	"examples/*",
@@ -21,6 +26,9 @@ exclude = [
 	"*.toml",
 	"*.md"
 ]
+
+[badges]
+maintenance = { status = "actively-developed" }
 
 [dependencies]
 lazy_static = "^1.4"
