@@ -3,6 +3,16 @@
 //!
 //! Local-affinity first NUMA-aware allocator with optional fallback.
 //!
+//! This crate supplies NUMA-aware local policy enabled allocation.
+//!
+//! ### When using `autoselect`
+//! Fallback system is triggered with `autoselect`.
+//! If system is not supporting NUMA-aware allocation it falls back to `Jemalloc`.
+//!
+//! ### When using `NUMA-aware`
+//! If autoselect is not used, `memmap` fallback will be triggered with
+//! default system page size and it will be used as allocator.
+//!
 //! # Examples
 //!
 //! ```rust
