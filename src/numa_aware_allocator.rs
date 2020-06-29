@@ -3,7 +3,7 @@ macro_rules! numa_aware_allocator {
   () => {
         // General imports
         use allocator_suite::adaptors::prelude::*;
-        use std::alloc::{System, GlobalAlloc, Alloc, Layout, Excess, AllocErr, CannotReallocInPlace};
+        use std::alloc::{System, GlobalAlloc, AllocRef, AllocInit, Layout, AllocErr, MemoryBlock};
         use allocator_suite::memory_sources::mmap::memory_map_source::MemoryMapSource;
         use allocator_suite::extensions::usize_ext::UsizeExt;
         use allocator_suite::allocators::allocator::Allocator;
@@ -73,53 +73,23 @@ macro_rules! numa_aware_allocator {
             }
         }
 
-        unsafe impl Alloc for NumaAllocator {
+        unsafe impl AllocRef for NumaAllocator {
             #[inline(always)]
-            unsafe fn alloc(&mut self, layout: Layout) -> Result<MemoryAddress, AllocErr>
+            fn alloc(&mut self, layout: Layout, init: AllocInit) -> Result<MemoryBlock, AllocErr>
             {
-                allocator_instance().alloc_alloc(layout)
+                let size = layout.size();
+                let ptr = match init {
+                    AllocInit::Uninitialized => unsafe { allocator_instance().alloc_alloc(layout) },
+                    AllocInit::Zeroed => unsafe { allocator_instance().alloc_alloc_zeroed(layout) },
+                }?;
+                Ok(MemoryBlock { ptr, size })
+
             }
 
             #[inline(always)]
             unsafe fn dealloc(&mut self, ptr: MemoryAddress, layout: Layout)
             {
                 allocator_instance().alloc_dealloc(ptr, layout)
-            }
-
-            #[inline(always)]
-            unsafe fn realloc(&mut self, ptr: MemoryAddress, layout: Layout, new_size: usize) -> Result<MemoryAddress, AllocErr>
-            {
-                allocator_instance().alloc_realloc(ptr, layout, new_size)
-            }
-
-            #[inline(always)]
-            unsafe fn alloc_zeroed(&mut self, layout: Layout) -> Result<MemoryAddress, AllocErr>
-            {
-                allocator_instance().alloc_alloc_zeroed(layout)
-            }
-
-            #[inline(always)]
-            unsafe fn alloc_excess(&mut self, layout: Layout) -> Result<Excess, AllocErr>
-            {
-                allocator_instance().alloc_alloc_excess(layout)
-            }
-
-            #[inline(always)]
-            unsafe fn realloc_excess(&mut self, ptr: MemoryAddress, layout: Layout, new_size: usize) -> Result<Excess, AllocErr>
-            {
-                allocator_instance().alloc_realloc_excess(ptr, layout, new_size)
-            }
-
-            #[inline(always)]
-            unsafe fn grow_in_place(&mut self, ptr: MemoryAddress, layout: Layout, new_size: usize) -> Result<(), CannotReallocInPlace>
-            {
-                allocator_instance().alloc_grow_in_place(ptr, layout, new_size)
-            }
-
-            #[inline(always)]
-            unsafe fn shrink_in_place(&mut self, ptr: MemoryAddress, layout: Layout, new_size: usize) -> Result<(), CannotReallocInPlace>
-            {
-                allocator_instance().alloc_shrink_in_place(ptr, layout, new_size)
             }
         }
   }

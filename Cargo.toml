@@ -32,7 +32,7 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 lazy_static = "^1.4"
-allocator-suite = "^0.1"
+allocator-suite = "0.1.6"
 
 [target.'cfg(not(any(target_os = "android", target_os = "linux")))'.dependencies]
 jemallocator = "^0.3"

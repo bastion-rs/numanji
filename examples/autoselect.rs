@@ -1,3 +1,5 @@
+#![feature(allocator_api)]
+
 // Allocator generator macro
 use numanji::*;
 
