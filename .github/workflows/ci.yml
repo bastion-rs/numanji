@@ -8,25 +8,15 @@ jobs:
       fail-fast: false
       matrix:
         toolchain:
-          - x86_64-pc-windows-msvc
-          - x86_64-pc-windows-gnu
-          - i686-pc-windows-msvc
           - x86_64-unknown-linux-gnu
           - x86_64-apple-darwin
         version:
-          - stable
           - nightly
         include:
-        - toolchain: x86_64-pc-windows-msvc
-          os: windows-latest
-        - toolchain: x86_64-pc-windows-gnu
-          os: windows-latest
-        - toolchain: i686-pc-windows-msvc
-          os: windows-latest
-        - toolchain: x86_64-unknown-linux-gnu
-          os: ubuntu-latest
-        - toolchain: x86_64-apple-darwin
-          os: macOS-latest
+          - toolchain: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - toolchain: x86_64-apple-darwin
+            os: macOS-latest
 
     name: ${{ matrix.version }} - ${{ matrix.toolchain }}
     runs-on: ${{ matrix.os }}
@@ -41,24 +31,17 @@ jobs:
           default: true
 
       - name: check nightly
-        if: matrix.version == 'nightly'
         uses: actions-rs/cargo@v1
         with:
           command: check
           args: --all --benches --bins --examples --tests
 
-      - name: check stable
-        if: matrix.version == 'stable'
+      - name: tests nightly
         uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --all --bins --examples --tests
-
-      - name: tests
-        uses: actions-rs/cargo@v1
+        if: toolchain == 'x86_64-unknown-linux-gnu'
         with:
           command: test
-          args: --all
+          args: --all --all-targets --all-features
 
   check_fmt_and_docs:
     name: Checking fmt and docs
@@ -69,10 +52,10 @@ jobs:
       - name: Setup
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           default: true
           components: rustfmt
-        
+
       - name: fmt
         run: cargo fmt --all -- --check
 

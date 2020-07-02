@@ -17,26 +17,25 @@
 //!
 //! ```rust
 //! // Allocator generator macro
+//! #![feature(allocator_api)]
 //! use numanji::*;
 //!
 //! // Do autoselect for allocator
 //! autoselect!();
 //!
-//! fn main() {
-//!     // Allocated by Numanji based on your Numa availability on your system.
-//!     let _vec = Vec::<usize>::with_capacity(1234);
-//! }
+//! // Allocated by Numanji based on your Numa availability on your system.
+//! let _vec = Vec::<usize>::with_capacity(1234);
 //! ```
 //!
 
 #![feature(allocator_api)]
 
-mod numa_aware_allocator;
-mod nonnuma_allocator;
 mod autoselect;
+mod nonnuma_allocator;
+mod numa_aware_allocator;
 
 pub mod prelude {
-    pub use super::numa_aware_allocator;
-    pub use super::nonnuma_allocator;
     pub use super::autoselect;
+    pub use super::nonnuma_allocator;
+    pub use super::numa_aware_allocator;
 }
