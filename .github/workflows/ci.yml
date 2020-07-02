@@ -38,9 +38,10 @@ jobs:
 
       - name: tests nightly
         uses: actions-rs/cargo@v1
+        if: toolchain == 'x86_64-unknown-linux-gnu'
         with:
           command: test
-          args: --all
+          args: --all --all-targets --all-features
 
   check_fmt_and_docs:
     name: Checking fmt and docs
