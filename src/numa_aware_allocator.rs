@@ -12,6 +12,7 @@ macro_rules! numa_aware_allocator {
 
         use lazy_static::*;
 
+        #[allow(missing_docs)]
         pub fn allocator_instance() -> &'static AllocatorAdaptor<'static, MemoryMapAllocator> {
             lazy_static! {
                 static ref MMAP_ALLOC: MemoryMapAllocator = {
@@ -39,9 +40,11 @@ macro_rules! numa_aware_allocator {
             &*MMAP_ADAPTER
         }
 
+        #[allow(missing_docs)]
         #[derive(Debug, Copy, Clone)]
         pub struct NumaAllocator;
 
+        #[allow(missing_docs)]
         #[global_allocator]
         pub static GLOBAL: NumaAllocator = NumaAllocator;
 
