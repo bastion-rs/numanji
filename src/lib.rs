@@ -18,6 +18,7 @@
 //! ```rust
 //! // Allocator generator macro
 //! #![feature(allocator_api)]
+//! #![feature(nonnull_slice_from_raw_parts)]
 //! use numanji::*;
 //!
 //! // Do autoselect for allocator
@@ -29,6 +30,7 @@
 //!
 
 #![feature(allocator_api)]
+#![feature(nonnull_slice_from_raw_parts)]
 
 mod autoselect;
 mod nonnuma_allocator;

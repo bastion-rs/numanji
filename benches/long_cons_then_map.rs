@@ -55,10 +55,10 @@ fn map<T, U>(f: fn(&T) -> U, list: Ptr<T>) -> Ptr<U> {
 #[cfg(test)]
 mod list_bench {
     extern crate test;
-    use test::Bencher;
     use super::*;
     use rand::Rng;
     use std::sync::Arc;
+    use test::Bencher;
     const SCALE: usize = 10000;
     #[bench]
     fn long_cons_then_count(bencher: &mut Bencher) {
