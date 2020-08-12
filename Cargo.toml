@@ -1,6 +1,6 @@
 [package]
 name = "numanji"
-version = "0.1.5"
+version = "0.1.6-alpha.0"
 description = "Local-affinity first NUMA-aware allocator with optional fallback"
 authors = ["Mahmut Bulut <vertexclique@gmail.com>"]
 keywords = ["numa", "numa-aware", "allocator", "memory"]
