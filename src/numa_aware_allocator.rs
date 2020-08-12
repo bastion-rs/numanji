@@ -3,7 +3,8 @@ macro_rules! numa_aware_allocator {
   () => {
         // General imports
         use allocator_suite::adaptors::prelude::*;
-        use std::alloc::{System, GlobalAlloc, AllocRef, AllocInit, Layout, AllocErr, MemoryBlock};
+        use core::ptr::NonNull;
+        use std::alloc::{System, GlobalAlloc, AllocRef, Layout, AllocErr};
         use allocator_suite::memory_sources::mmap::memory_map_source::MemoryMapSource;
         use allocator_suite::extensions::usize_ext::UsizeExt;
         use allocator_suite::allocators::allocator::Allocator;
@@ -78,15 +79,11 @@ macro_rules! numa_aware_allocator {
 
         unsafe impl AllocRef for NumaAllocator {
             #[inline(always)]
-            fn alloc(&mut self, layout: Layout, init: AllocInit) -> Result<MemoryBlock, AllocErr>
+            fn alloc(&mut self, layout: Layout) -> Result<NonNull<[u8]>, AllocErr>
             {
                 let size = layout.size();
-                let ptr = match init {
-                    AllocInit::Uninitialized => unsafe { allocator_instance().alloc_alloc(layout) },
-                    AllocInit::Zeroed => unsafe { allocator_instance().alloc_alloc_zeroed(layout) },
-                }?;
-                Ok(MemoryBlock { ptr, size })
-
+                let ptr = unsafe { allocator_instance().alloc_alloc_zeroed(layout) }?;
+                Ok(NonNull::slice_from_raw_parts(ptr, size))
             }
 
             #[inline(always)]

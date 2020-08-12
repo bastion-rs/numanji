@@ -1,4 +1,5 @@
 #![feature(allocator_api)]
+#![feature(nonnull_slice_from_raw_parts)]
 
 // Allocator generator macro
 use numanji::*;
